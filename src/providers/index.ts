@@ -5,6 +5,19 @@ export const getProvider = (jsonRpcUrl: string) => {
   return provider;
 };
 
+export const getInfuraProvider = (
+  network = 'homestead',
+  projectId: string,
+  projectSecret: string,
+) => {
+  const provider = new ethers.providers.InfuraProvider(network, {
+    projectId,
+    projectSecret,
+  });
+
+  return provider;
+};
+
 export const getWalletProvider = (privateKey: string, jsonRpcUrl: string) => {
   const wallet = new Wallet(privateKey, new providers.JsonRpcProvider(jsonRpcUrl));
   return wallet;

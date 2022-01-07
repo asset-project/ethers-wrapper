@@ -14,6 +14,10 @@ export const getWallet = (privateKey: string) => {
 };
 
 export const createHDWalletFromMnemonic = async (mnemonic: string) => {
+  if (!ethers.utils.isValidMnemonic(mnemonic)) {
+    return;
+  }
+
   try {
     const hdnode = ethers.utils.HDNode.fromMnemonic(mnemonic);
     // eslint-disable-next-line quotes
