@@ -1,6 +1,11 @@
 import { ethers, utils } from 'ethers';
 import { txType1, txType2 } from '../helpers';
-import type { SignTypedData, TransactionParams } from '../types';
+import type { Provider, SignTypedData, TransactionParams } from '../types';
+
+export const getSigner = (provider: Provider) => {
+  const signer = provider.getSigner();
+  return signer;
+};
 
 export const personalSign = async (wallet: ethers.Wallet, message: string) => {
   const hex = utils.isHexString(message) ? utils.arrayify(message) : message;

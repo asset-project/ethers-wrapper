@@ -2,7 +2,10 @@
 node_modules
 .npm
 
-# build
+# Build
 esm
 lib
 coverage
+
+# Enviroment
+.env
