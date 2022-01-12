@@ -1,6 +1,6 @@
 import dotEnv from 'dotenv';
 import type { Provider } from '../src/types';
-import { getProvider } from '../src/providers';
+import { getProvider } from '../src';
 import {
   erc20Balance,
   erc20Decimals,
@@ -28,42 +28,42 @@ const NONEXISTENT_TOKEN_ADDRESS = '0x333333333333333333333333333333333333333a';
 
 describe('Test ERC20 methods', () => {
   it('Checking token name', async () => {
-    const name = await erc20Name(provider, MOCK_TOKEN.address);
-    expect(name).toBe(MOCK_TOKEN.name);
+    const result = await erc20Name(provider, MOCK_TOKEN.address);
+    expect(result).toBe(MOCK_TOKEN.name);
   });
 
   it('Checking token symbol', async () => {
-    const symbol = await erc20Symbol(provider, MOCK_TOKEN.address);
-    expect(symbol).toBe(MOCK_TOKEN.symbol);
+    const result = await erc20Symbol(provider, MOCK_TOKEN.address);
+    expect(result).toBe(MOCK_TOKEN.symbol);
   });
 
   it('Checking token decimals', async () => {
-    const decimals = await erc20Decimals(provider, MOCK_TOKEN.address);
-    expect(decimals).toBe(MOCK_TOKEN.decimals);
+    const result = await erc20Decimals(provider, MOCK_TOKEN.address);
+    expect(result).toBe(MOCK_TOKEN.decimals);
   });
 
   it('Checking token balance', async () => {
-    const balance = await erc20Balance(provider, MOCK_TOKEN.address, address);
-    expect(balance).toBeDefined();
+    const result = await erc20Balance(provider, MOCK_TOKEN.address, address);
+    expect(result).toBeDefined();
   });
 
   it('Name of a non-existent token', async () => {
-    const name = await erc20Name(provider, NONEXISTENT_TOKEN_ADDRESS);
-    expect(name).toBeUndefined();
+    const result = await erc20Name(provider, NONEXISTENT_TOKEN_ADDRESS);
+    expect(result).toBeUndefined();
   });
 
   it('Symbol of a non-existent token', async () => {
-    const symbol = await erc20Symbol(provider, NONEXISTENT_TOKEN_ADDRESS);
-    expect(symbol).toBeUndefined();
+    const result = await erc20Symbol(provider, NONEXISTENT_TOKEN_ADDRESS);
+    expect(result).toBeUndefined();
   });
 
   it('Decimals of a non-existent token', async () => {
-    const decimals = await erc20Decimals(provider, NONEXISTENT_TOKEN_ADDRESS);
-    expect(decimals).toBeUndefined();
+    const result = await erc20Decimals(provider, NONEXISTENT_TOKEN_ADDRESS);
+    expect(result).toBeUndefined();
   });
 
   it('Balance of a non-existent token', async () => {
-    const balance = await erc20Balance(provider, NONEXISTENT_TOKEN_ADDRESS, address);
-    expect(balance).toBeUndefined();
+    const result = await erc20Balance(provider, NONEXISTENT_TOKEN_ADDRESS, address);
+    expect(result).toBeUndefined();
   });
 });
