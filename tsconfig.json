@@ -101,6 +101,8 @@
     "node_modules",
     "lib",
     "esm",
-    "test/*"
+    "test/*",
+    "scripts/*",
+    "contracts/*",
   ]
 }
