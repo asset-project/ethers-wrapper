@@ -11,6 +11,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
 contract ERC721Mock is ERC721 {
     address private owner;
+    uint256 private _totalSupply;
 
     constructor(string memory name, string memory symbol) ERC721(name, symbol) {
         owner = msg.sender;
@@ -18,6 +19,10 @@ contract ERC721Mock is ERC721 {
 
     function getOwner() public view returns (address) {
         return owner;
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _totalSupply;
     }
 
     function baseURI() public view returns (string memory) {
@@ -30,6 +35,7 @@ contract ERC721Mock is ERC721 {
 
     function mint(address to, uint256 tokenId) public {
         _mint(to, tokenId);
+        _totalSupply += 1;
     }
 
     function safeMint(address to, uint256 tokenId) public {
@@ -46,5 +52,6 @@ contract ERC721Mock is ERC721 {
 
     function burn(uint256 tokenId) public {
         _burn(tokenId);
+        _totalSupply -= 1;
     }
 }

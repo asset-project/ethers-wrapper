@@ -7,6 +7,7 @@ const main = async () => {
 
   console.log('ERC721 Mock Token deployed to:', erc721Mock.address);
 
+  console.log('generate Tokens');
   try {
     const mint1 = await erc721Mock.mint('0xd02246eD883e8aB92F363e7a35453DcFa2052669', 1);
     await mint1.wait();
