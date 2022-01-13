@@ -1,9 +1,13 @@
 import { BigNumber, ethers } from 'ethers';
-import type { Provider } from '../../types';
+import type { Provider, ContractMethodOption } from '../../types';
 import { ERC721_ABI } from '../../helpers';
 
 const getErc721Contract = (provider: Provider, contractAddress: string) => {
   return new ethers.Contract(contractAddress, ERC721_ABI, provider);
+};
+
+const getErc721ContractSigner = (signer: ethers.Signer, contractAddress: string) => {
+  return new ethers.Contract(contractAddress, ERC721_ABI, signer);
 };
 
 // Methods
@@ -80,6 +84,24 @@ export const erc721TokenURI = async (
   try {
     const tokenURI = await contract.tokenURI(tokenId);
     return tokenURI as string;
+  } catch {
+    return;
+  }
+};
+
+export const erc721TransferFrom = async (
+  signer: ethers.Signer,
+  contractAddress: string,
+  toAddress: string,
+  tokenId: number,
+  option?: ContractMethodOption,
+) => {
+  const contract = getErc721ContractSigner(signer, contractAddress);
+
+  try {
+    const address = await signer.getAddress();
+    const tx = await contract.transferFrom(address, toAddress, tokenId, { ...option });
+    return tx;
   } catch {
     return;
   }

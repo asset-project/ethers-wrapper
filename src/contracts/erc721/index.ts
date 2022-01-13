@@ -5,4 +5,5 @@ export {
   erc721BalanceOf,
   erc721OwnerOf,
   erc721TokenURI,
+  erc721TransferFrom,
 } from './methods';

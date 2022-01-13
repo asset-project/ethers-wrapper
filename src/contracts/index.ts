@@ -13,6 +13,7 @@ import {
   erc721BalanceOf,
   erc721OwnerOf,
   erc721TokenURI,
+  erc721TransferFrom,
 } from './erc721';
 
 export const contracts = {
@@ -31,5 +32,6 @@ export const contracts = {
     balanceOf: erc721BalanceOf,
     ownerOf: erc721OwnerOf,
     tokenURI: erc721TokenURI,
+    transferFrom: erc721TransferFrom,
   },
 };

@@ -53,7 +53,7 @@ describe('Test ERC20 methods', () => {
     const address = await wallet.getAddress();
     const walletSigner = getWalletSigner(wallet, provider);
 
-    const maxFeePerGas = formatGasPrice(15);
+    const maxFeePerGas = formatGasPrice(10);
     const maxPriorityFeePerGas = formatGasPrice(1.25);
 
     const result = await contracts.ERC20.transfer(walletSigner, MOCK_TOKEN.address, address, 1, {

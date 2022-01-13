@@ -1,7 +1,7 @@
 import dotEnv from 'dotenv';
 import type { ethers } from 'ethers';
 import type { Provider } from '../src/types';
-import { getProvider, getWallet, contracts } from '../src';
+import { getProvider, getWallet, contracts, getWalletSigner, formatGasPrice } from '../src';
 
 let wallet: ethers.Wallet | null = null;
 let provider: Provider | null = null;
@@ -53,6 +53,20 @@ describe('Test ERC721 methods', () => {
     const result = await contracts.ERC721.tokenURI(provider, MOCK_NFT.address, 1);
     expect(result).toBe('');
   });
+
+  it('Checking token safeTrasferFrom', async () => {
+    const address = await wallet.getAddress();
+    const walletSigner = getWalletSigner(wallet, provider);
+
+    const maxFeePerGas = formatGasPrice(10);
+    const maxPriorityFeePerGas = formatGasPrice(1.25);
+
+    const result = await contracts.ERC721.transferFrom(walletSigner, MOCK_NFT.address, address, 2, {
+      maxFeePerGas,
+      maxPriorityFeePerGas,
+    });
+    expect(result).toBeDefined();
+  }, 30000);
 
   it('Name of a non-existent token', async () => {
     const result = await contracts.ERC721.name(provider, NONEXISTENT_TOKEN_ADDRESS);
