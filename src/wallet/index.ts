@@ -39,6 +39,7 @@ export const createHDWalletFromMnemonic = async (mnemonic: string) => {
   }
 };
 
-export const connectWallet = (wallet: ethers.Wallet, provider: Provider) => {
-  wallet.connect(provider);
+export const getWalletSigner = (wallet: ethers.Wallet, provider: Provider) => {
+  const walletSigner = wallet.connect(provider);
+  return walletSigner;
 };

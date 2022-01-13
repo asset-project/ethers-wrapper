@@ -1,6 +1,7 @@
-import { ethers } from 'ethers';
-import { formatUnits, parseUnits } from 'ethers/lib/utils';
+import { BigNumber, ethers } from 'ethers';
+import { formatUnits } from 'ethers/lib/utils';
 import type { Provider } from '../../../types';
+import { numberOfTokens } from '../..';
 import { ERC20_ABI } from '../../abis/erc20';
 
 const getErc20Contract = (provider: Provider, contractAddress: string) => {
@@ -45,6 +46,17 @@ export const erc20Decimals = async (provider: Provider, contractAddress: string)
   }
 };
 
+export const erc20TotalSupply = async (provider: Provider, contractAddress: string) => {
+  const contract = getErc20Contract(provider, contractAddress);
+
+  try {
+    const totalSupply = (await contract.totalSupply()) as BigNumber;
+    return formatUnits(totalSupply);
+  } catch {
+    return;
+  }
+};
+
 export const erc20Balance = async (
   provider: Provider,
   contractAddress: string,
@@ -53,22 +65,16 @@ export const erc20Balance = async (
   const contract = getErc20Contract(provider, contractAddress);
 
   try {
-    const balance = await contract.balanceOf(targetAddress);
+    const balance = (await contract.balanceOf(targetAddress)) as BigNumber;
     return formatUnits(balance);
   } catch {
     return;
   }
 };
 
-export const erc20TotalSupply = async (provider: Provider, contractAddress: string) => {
-  const contract = getErc20Contract(provider, contractAddress);
-
-  try {
-    const totalSupply = await contract.totalSupply();
-    return totalSupply as number;
-  } catch {
-    return;
-  }
+type GasPriceOption = {
+  maxFeePerGas?: ethers.BigNumber;
+  maxPriorityFeePerGas?: ethers.BigNumber;
 };
 
 export const erc20Transfer = async (
@@ -76,14 +82,13 @@ export const erc20Transfer = async (
   contractAddress: string,
   toAddress: string,
   amount: number,
-  option?: object,
+  option?: GasPriceOption,
 ) => {
   const contract = getErc20ContractSigner(signer, contractAddress);
 
   try {
-    const tx = await contract.transfer(toAddress, parseUnits(String(amount)), option);
-    const result = await tx.wait();
-    return result;
+    const tx = await contract.transfer(toAddress, numberOfTokens(amount), { ...option });
+    return tx;
   } catch {
     return;
   }

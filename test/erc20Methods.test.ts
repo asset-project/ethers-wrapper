@@ -1,19 +1,15 @@
 import dotEnv from 'dotenv';
+import type { ethers } from 'ethers';
 import type { Provider } from '../src/types';
-import { getProvider } from '../src';
-import {
-  erc20Balance,
-  erc20Decimals,
-  erc20Name,
-  erc20Symbol,
-} from '../src/helpers/contracts/erc20';
+import { contracts, formatGasPrice, getProvider, getWallet, getWalletSigner } from '../src';
 
+let wallet: ethers.Wallet | null = null;
 let provider: Provider | null = null;
-const address = '0x5590beec679fE87E0D772272eB920Caaa396caaC';
 
 beforeAll(() => {
   dotEnv.config();
 
+  wallet = getWallet(process.env.PRIVATE_KEY);
   provider = getProvider(process.env.JSON_RPC_URL) as Provider;
 });
 
@@ -28,42 +24,68 @@ const NONEXISTENT_TOKEN_ADDRESS = '0x333333333333333333333333333333333333333a';
 
 describe('Test ERC20 methods', () => {
   it('Checking token name', async () => {
-    const result = await erc20Name(provider, MOCK_TOKEN.address);
+    const result = await contracts.ERC20.name(provider, MOCK_TOKEN.address);
     expect(result).toBe(MOCK_TOKEN.name);
   });
 
   it('Checking token symbol', async () => {
-    const result = await erc20Symbol(provider, MOCK_TOKEN.address);
+    const result = await contracts.ERC20.symbol(provider, MOCK_TOKEN.address);
     expect(result).toBe(MOCK_TOKEN.symbol);
   });
 
   it('Checking token decimals', async () => {
-    const result = await erc20Decimals(provider, MOCK_TOKEN.address);
+    const result = await contracts.ERC20.decimals(provider, MOCK_TOKEN.address);
     expect(result).toBe(MOCK_TOKEN.decimals);
   });
 
+  it('Checking token totalSupply', async () => {
+    const result = await contracts.ERC20.totalSupply(provider, MOCK_TOKEN.address);
+    expect(Number(result)).toBeGreaterThanOrEqual(0);
+  });
+
   it('Checking token balance', async () => {
-    const result = await erc20Balance(provider, MOCK_TOKEN.address, address);
+    const address = await wallet.getAddress();
+    const result = await contracts.ERC20.balance(provider, MOCK_TOKEN.address, address);
     expect(result).toBeDefined();
   });
 
+  it('Checking erc20 token transfer', async () => {
+    const address = await wallet.getAddress();
+    const walletSigner = getWalletSigner(wallet, provider);
+
+    const maxFeePerGas = formatGasPrice(15);
+    const maxPriorityFeePerGas = formatGasPrice(1.25);
+
+    const result = await contracts.ERC20.transfer(walletSigner, MOCK_TOKEN.address, address, 1, {
+      maxFeePerGas,
+      maxPriorityFeePerGas,
+    });
+    expect(result).toBeDefined();
+  }, 15000);
+
   it('Name of a non-existent token', async () => {
-    const result = await erc20Name(provider, NONEXISTENT_TOKEN_ADDRESS);
+    const result = await contracts.ERC20.name(provider, NONEXISTENT_TOKEN_ADDRESS);
     expect(result).toBeUndefined();
   });
 
   it('Symbol of a non-existent token', async () => {
-    const result = await erc20Symbol(provider, NONEXISTENT_TOKEN_ADDRESS);
+    const result = await contracts.ERC20.symbol(provider, NONEXISTENT_TOKEN_ADDRESS);
     expect(result).toBeUndefined();
   });
 
   it('Decimals of a non-existent token', async () => {
-    const result = await erc20Decimals(provider, NONEXISTENT_TOKEN_ADDRESS);
+    const result = await contracts.ERC20.decimals(provider, NONEXISTENT_TOKEN_ADDRESS);
+    expect(result).toBeUndefined();
+  });
+
+  it('TotalSupply of a non-existent token', async () => {
+    const result = await contracts.ERC20.totalSupply(provider, NONEXISTENT_TOKEN_ADDRESS);
     expect(result).toBeUndefined();
   });
 
   it('Balance of a non-existent token', async () => {
-    const result = await erc20Balance(provider, NONEXISTENT_TOKEN_ADDRESS, address);
+    const address = await wallet.getAddress();
+    const result = await contracts.ERC20.balance(provider, NONEXISTENT_TOKEN_ADDRESS, address);
     expect(result).toBeUndefined();
   });
 });
