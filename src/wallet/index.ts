@@ -1,17 +1,17 @@
 import { ethers } from 'ethers';
-import { Provider } from '../types';
+import type { Provider } from '../types';
 
-export const createWallet = async () => {
+export const createWallet = () => {
   return ethers.Wallet.createRandom();
 };
 
 export const getWalletFromMnemonic = (mnemonic: string) => {
-  try {
-    const wallet = ethers.Wallet.fromMnemonic(mnemonic);
-    return wallet;
-  } catch {
+  if (!ethers.utils.isValidMnemonic(mnemonic)) {
     return;
   }
+
+  const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+  return wallet;
 };
 
 export const getWallet = (privateKey: string) => {
@@ -23,20 +23,15 @@ export const getWallet = (privateKey: string) => {
   }
 };
 
-export const createHDWalletFromMnemonic = async (mnemonic: string) => {
+export const createHDWalletFromMnemonic = (mnemonic: string) => {
   if (!ethers.utils.isValidMnemonic(mnemonic)) {
     return;
   }
 
-  try {
-    const hdnode = ethers.utils.HDNode.fromMnemonic(mnemonic);
-    // eslint-disable-next-line quotes
-    const hdWallet = hdnode.derivePath("m/44'/60'/0'/0");
-
-    return hdWallet;
-  } catch {
-    return;
-  }
+  const hdnode = ethers.utils.HDNode.fromMnemonic(mnemonic);
+  // eslint-disable-next-line quotes
+  const hdWallet = hdnode.derivePath("m/44'/60'/0'/0");
+  return hdWallet;
 };
 
 export const getWalletSigner = (wallet: ethers.Wallet, provider: Provider) => {
