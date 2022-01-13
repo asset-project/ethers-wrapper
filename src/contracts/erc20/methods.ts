@@ -1,8 +1,7 @@
 import { BigNumber, ethers } from 'ethers';
 import { formatUnits } from 'ethers/lib/utils';
-import type { Provider } from '../../../types';
-import { numberOfTokens } from '../..';
-import { ERC20_ABI } from '../../abis/erc20';
+import type { Provider } from '../../types';
+import { ERC20_ABI, numberOfTokens } from '../../helpers';
 
 const getErc20Contract = (provider: Provider, contractAddress: string) => {
   return new ethers.Contract(contractAddress, ERC20_ABI, provider);
@@ -72,7 +71,8 @@ export const erc20Balance = async (
   }
 };
 
-type GasPriceOption = {
+type Option = {
+  decimals?: number;
   maxFeePerGas?: ethers.BigNumber;
   maxPriorityFeePerGas?: ethers.BigNumber;
 };
@@ -82,12 +82,12 @@ export const erc20Transfer = async (
   contractAddress: string,
   toAddress: string,
   amount: number,
-  option?: GasPriceOption,
+  option?: Option,
 ) => {
   const contract = getErc20ContractSigner(signer, contractAddress);
-
+  const decimals = option ? option.decimals : undefined;
   try {
-    const tx = await contract.transfer(toAddress, numberOfTokens(amount), { ...option });
+    const tx = await contract.transfer(toAddress, numberOfTokens(amount, decimals), { ...option });
     return tx;
   } catch {
     return;

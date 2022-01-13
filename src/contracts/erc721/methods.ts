@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from 'ethers';
-import type { Provider } from '../../../types';
-import { ERC721_ABI } from '../../abis/erc721';
+import type { Provider } from '../../types';
+import { ERC721_ABI } from '../../helpers';
 
 const getErc721Contract = (provider: Provider, contractAddress: string) => {
   return new ethers.Contract(contractAddress, ERC721_ABI, provider);
