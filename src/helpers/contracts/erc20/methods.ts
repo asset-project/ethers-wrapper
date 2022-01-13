@@ -7,10 +7,7 @@ const getErc20Contract = (provider: Provider, contractAddress: string) => {
   return new ethers.Contract(contractAddress, ERC20_ABI, provider);
 };
 
-const getErc20ContractSigner = (
-  signer: ethers.providers.JsonRpcSigner,
-  contractAddress: string,
-) => {
+const getErc20ContractSigner = (signer: ethers.Signer, contractAddress: string) => {
   return new ethers.Contract(contractAddress, ERC20_ABI, signer);
 };
 
@@ -75,15 +72,16 @@ export const erc20TotalSupply = async (provider: Provider, contractAddress: stri
 };
 
 export const erc20Transfer = async (
-  signer: ethers.providers.JsonRpcSigner,
+  signer: ethers.Signer,
   contractAddress: string,
   toAddress: string,
   amount: number,
+  option?: object,
 ) => {
   const contract = getErc20ContractSigner(signer, contractAddress);
 
   try {
-    const tx = await contract.transfer(toAddress, parseUnits(String(amount)));
+    const tx = await contract.transfer(toAddress, parseUnits(String(amount)), option);
     const result = await tx.wait();
     return result;
   } catch {

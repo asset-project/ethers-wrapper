@@ -1,7 +1,17 @@
 import { ethers } from 'ethers';
+import { Provider } from '../types';
 
 export const createWallet = async () => {
   return ethers.Wallet.createRandom();
+};
+
+export const getWalletFromMnemonic = (mnemonic: string) => {
+  try {
+    const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+    return wallet;
+  } catch {
+    return;
+  }
 };
 
 export const getWallet = (privateKey: string) => {
@@ -27,4 +37,8 @@ export const createHDWalletFromMnemonic = async (mnemonic: string) => {
   } catch {
     return;
   }
+};
+
+export const connectWallet = (wallet: ethers.Wallet, provider: Provider) => {
+  wallet.connect(provider);
 };
