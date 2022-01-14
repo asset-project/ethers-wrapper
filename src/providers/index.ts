@@ -6,7 +6,7 @@ export const getProvider = (jsonRpcUrl: string) => {
 };
 
 export const getInfuraProvider = (
-  network = 'homestead',
+  network = 'homestead' as 'homestead' | 'ropsten' | 'rinkeby' | 'kovan',
   projectId: string,
   projectSecret: string,
 ) => {
