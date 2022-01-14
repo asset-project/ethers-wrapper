@@ -54,7 +54,7 @@ describe('Test ERC721 methods', () => {
     expect(result).toBe('');
   });
 
-  it('Checking token safeTrasferFrom', async () => {
+  it('Checking token trasferFrom', async () => {
     const address = await wallet.getAddress();
     const walletSigner = getWalletSigner(wallet, provider);
 
