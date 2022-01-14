@@ -5,23 +5,50 @@ import {
   getProvider,
   getWallet,
   getWalletFromMnemonic,
+  getWalletProvider,
   getWalletSigner,
 } from '../src';
+import { getInfuraProvider } from '../src/providers';
 import type { Provider } from '../src/types';
 
-let privateKey = '';
-let mnemonic = '';
 let provider: Provider | null = null;
 
 beforeAll(() => {
   dotEnv.config();
 
-  privateKey = process.env.PRIVATE_KEY;
-  mnemonic = process.env.MNEMONIC;
   provider = getProvider(process.env.JSON_RPC_URL) as Provider;
 });
 
 describe('Test wallet', () => {
+  // Provider
+  it('Test the getProvider function.', async () => {
+    const provider = getProvider(process.env.JSON_RPC_URL);
+    expect(provider).toBeDefined();
+
+    const blockNumber = await provider.getBlockNumber();
+    expect(blockNumber).toBeGreaterThan(1000000);
+  });
+
+  it('Test getInfuraProvider function.', async () => {
+    const provider = getInfuraProvider(
+      'homestead',
+      process.env.INFURA_PROJECT_ID,
+      process.env.INFURA_PROJECT_SECRET,
+    );
+    expect(provider).toBeDefined();
+
+    const blockNumber = await provider.getBlockNumber();
+    expect(blockNumber).toBeGreaterThan(1000000);
+  });
+
+  it('Test the getWalletProvider function.', async () => {
+    const wallet = getWalletProvider(process.env.PRIVATE_KEY, process.env.JSON_RPC_URL);
+    expect(wallet).toBeDefined();
+
+    const chainId = await wallet.getChainId();
+    expect(chainId).toBe(3);
+  });
+
   it('Test the createWallet function.', async () => {
     const wallet = createWallet();
     expect(wallet).toBeDefined();
@@ -31,7 +58,7 @@ describe('Test wallet', () => {
   });
 
   it('Test the getWalletFromMnemonic function.', async () => {
-    const wallet = getWalletFromMnemonic(mnemonic);
+    const wallet = getWalletFromMnemonic(process.env.MNEMONIC);
     expect(wallet).toBeDefined();
 
     const address = await wallet.getAddress();
@@ -42,7 +69,7 @@ describe('Test wallet', () => {
   });
 
   it('Test the getWallet function.', async () => {
-    const wallet = getWallet(privateKey);
+    const wallet = getWallet(process.env.PRIVATE_KEY);
     expect(wallet).toBeDefined();
 
     const address = await wallet.getAddress();
@@ -53,7 +80,7 @@ describe('Test wallet', () => {
   });
 
   it('Test the createHDWalletFromMnemonic function.', async () => {
-    const wallet = createHDWalletFromMnemonic(mnemonic);
+    const wallet = createHDWalletFromMnemonic(process.env.MNEMONIC);
     expect(wallet).toBeDefined();
     expect(wallet.address).toBeDefined();
 
@@ -62,7 +89,7 @@ describe('Test wallet', () => {
   });
 
   it('Test the getWalletSigner', async () => {
-    const wallet = getWalletFromMnemonic(mnemonic);
+    const wallet = getWalletFromMnemonic(process.env.MNEMONIC);
     const walletSigner = getWalletSigner(wallet, provider);
     expect(walletSigner).toBeDefined();
   });
