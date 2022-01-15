@@ -3,12 +3,12 @@ import {
   createHDWalletFromMnemonic,
   createWallet,
   getProvider,
+  getInfuraProvider,
   getWallet,
   getWalletFromMnemonic,
   getWalletProvider,
   getWalletSigner,
 } from '../src';
-import { getInfuraProvider } from '../src/providers';
 import type { Provider } from '../src/types';
 
 let provider: Provider | null = null;
