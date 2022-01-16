@@ -10,3 +10,4 @@ export { getSigner, personalSign, ethSignTransaction, ethSignTypedData } from '.
 export { ethSendTransaction } from './transactions';
 export { contracts } from './contracts';
 export { numberOfTokens, formatGasPrice } from './helpers';
+export type { Provider } from './types';
