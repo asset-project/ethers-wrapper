@@ -7,7 +7,7 @@ let wallet: Wallet | null = null;
 beforeAll(() => {
   dotEnv.config();
 
-  wallet = getWalletProvider(process.env.PRIVATE_KEY, process.env.JSON_RPC_URL);
+  wallet = getWalletProvider(process.env.PRIVATE_KEY, process.env.TESTNET_JSON_RPC_URL);
 });
 
 describe('Test Transaction', () => {

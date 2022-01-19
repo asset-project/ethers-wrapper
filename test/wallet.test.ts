@@ -16,13 +16,13 @@ let provider: Provider | null = null;
 beforeAll(() => {
   dotEnv.config();
 
-  provider = getProvider(process.env.JSON_RPC_URL) as Provider;
+  provider = getProvider(process.env.TESTNET_JSON_RPC_URL) as Provider;
 });
 
 describe('Test wallet', () => {
   // Provider
   it('Test the getProvider function.', async () => {
-    const provider = getProvider(process.env.JSON_RPC_URL);
+    const provider = getProvider(process.env.TESTNET_JSON_RPC_URL);
     expect(provider).toBeDefined();
 
     const blockNumber = await provider.getBlockNumber();
@@ -42,7 +42,7 @@ describe('Test wallet', () => {
   });
 
   it('Test the getWalletProvider function.', async () => {
-    const wallet = getWalletProvider(process.env.PRIVATE_KEY, process.env.JSON_RPC_URL);
+    const wallet = getWalletProvider(process.env.PRIVATE_KEY, process.env.TESTNET_JSON_RPC_URL);
     expect(wallet).toBeDefined();
 
     const chainId = await wallet.getChainId();

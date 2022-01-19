@@ -14,7 +14,7 @@ let provider: Provider | null = null;
 beforeAll(() => {
   dotEnv.config();
 
-  provider = getProvider(process.env.MAIN_NET_JSON_RPC_URL) as Provider;
+  provider = getProvider(process.env.MAINNET_JSON_RPC_URL) as Provider;
 });
 
 describe('Test helper', () => {

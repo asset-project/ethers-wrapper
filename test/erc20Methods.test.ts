@@ -10,7 +10,7 @@ beforeAll(() => {
   dotEnv.config();
 
   wallet = getWallet(process.env.PRIVATE_KEY);
-  provider = getProvider(process.env.JSON_RPC_URL) as Provider;
+  provider = getProvider(process.env.TESTNET_JSON_RPC_URL) as Provider;
 });
 
 const MOCK_TOKEN = {
