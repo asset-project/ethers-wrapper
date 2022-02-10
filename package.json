@@ -1,12 +1,12 @@
 {
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.6",
   "name": "@asset-projects/ethers-wrapper",
   "description": "",
   "author": "@asset-projects",
   "bugs": {
-    "url": "https://github.com/asset-project/ethers-wrapper/issues"
+    "url": "https://github.com/asset-projects/ethers-wrapper/issues"
   },
-  "homepage": "https://github.com/asset-project/ethers-wrapper#readme",
+  "homepage": "https://github.com/asset-projects/ethers-wrapper#readme",
   "keywords": [
     "asset-projects",
     "ethereum",
