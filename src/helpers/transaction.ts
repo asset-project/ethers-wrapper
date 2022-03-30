@@ -6,7 +6,7 @@ export const txType1 = ({ from, to, nonce, value, gasLimit, gasPrice, data }: Tx
     from,
     to,
     nonce,
-    value: value ? ethers.utils.parseUnits(value, 'gwei') : undefined,
+    value: value ? ethers.utils.parseEther(value) : undefined,
     gasLimit,
     gasPrice: gasPrice ? ethers.utils.parseUnits(gasPrice, 'gwei') : undefined,
     data,
@@ -29,7 +29,7 @@ export const txType2 = ({
     from,
     to,
     nonce,
-    value: value ? ethers.utils.parseUnits(value, 'gwei') : undefined,
+    value: value ? ethers.utils.parseEther(value) : undefined,
     gasLimit,
     maxFeePerGas: maxFeePerGas ? ethers.utils.parseUnits(maxFeePerGas, 'gwei') : undefined,
     maxPriorityFeePerGas: maxPriorityFeePerGas
