@@ -10,8 +10,9 @@ export { getSigner, personalSign, ethSignTransaction, ethSignTypedData } from '.
 export { ethSendTransaction } from './transactions';
 export { contracts } from './contracts';
 export {
+  formatUnits,
   numberOfTokens,
-  formatGasPrice,
+  parseGasPrice,
   getEnsResolver,
   lookupAddress,
   resolveName,

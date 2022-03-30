@@ -1,7 +1,7 @@
 import dotEnv from 'dotenv';
 import type { ethers } from 'ethers';
 import type { Provider } from '../src/types';
-import { contracts, formatGasPrice, getProvider, getWallet, getWalletSigner } from '../src';
+import { contracts, parseGasPrice, getProvider, getWallet, getWalletSigner } from '../src';
 
 let wallet: ethers.Wallet | null = null;
 let provider: Provider | null = null;
@@ -53,8 +53,8 @@ describe('Test ERC20 methods', () => {
     const address = await wallet.getAddress();
     const walletSigner = getWalletSigner(wallet, provider);
 
-    const maxFeePerGas = formatGasPrice(10);
-    const maxPriorityFeePerGas = formatGasPrice(1.25);
+    const maxFeePerGas = parseGasPrice(10);
+    const maxPriorityFeePerGas = parseGasPrice(1.25);
 
     const result = await contracts.ERC20.transfer(walletSigner, MOCK_TOKEN.address, address, 1, {
       maxFeePerGas,

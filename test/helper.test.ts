@@ -1,8 +1,9 @@
 import dotEnv from 'dotenv';
 import {
   type Provider,
+  formatUnits,
   numberOfTokens,
-  formatGasPrice,
+  parseGasPrice,
   getProvider,
   getEnsResolver,
   lookupAddress,
@@ -18,14 +19,19 @@ beforeAll(() => {
 });
 
 describe('Test helper', () => {
+  it('Test the formatUnits', () => {
+    expect(formatUnits('100000000000000000').toString()).toBe('0.1');
+    expect(formatUnits('10000000', 'gwei').toString()).toBe('0.01');
+  });
+
   it('Test the numberOfTokens', () => {
     const bigNumber = numberOfTokens(100, 8);
     expect(bigNumber.toString()).toBe('10000000000');
     expect(bigNumber.toNumber()).toBe(10000000000);
   });
 
-  it('Test the formatGasPrice', () => {
-    const bigNumber = formatGasPrice(12);
+  it('Test the parseGasPrice', () => {
+    const bigNumber = parseGasPrice(12);
     expect(bigNumber.toHexString()).toBe('0x02cb417800');
   });
 

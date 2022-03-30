@@ -1,6 +1,10 @@
 import { ethers } from 'ethers';
 
-export const formatGasPrice = (gasPrice: number) => {
+export const formatUnits = (amount: ethers.BigNumberish, unitName?: ethers.BigNumberish) => {
+  return ethers.utils.formatUnits(amount, unitName);
+};
+
+export const parseGasPrice = (gasPrice: number) => {
   return ethers.utils.parseUnits(String(gasPrice), 'gwei');
 };
 
