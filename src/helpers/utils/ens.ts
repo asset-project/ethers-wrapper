@@ -1,4 +1,4 @@
-import { Provider } from '../..';
+import type { Provider } from '../..';
 
 export const getEnsResolver = async (provider: Provider, ensName: string) => {
   return await provider.getResolver(ensName);

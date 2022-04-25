@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers';
-import type { Provider, ContractMethodOption } from '../../types';
+import type { Provider, TransactionFeeOptions } from '../../types';
 import { ERC721_ABI } from '../../helpers';
 
 const getErc721Contract = (provider: Provider, contractAddress: string) => {
@@ -94,7 +94,7 @@ export const erc721TransferFrom = async (
   contractAddress: string,
   toAddress: string,
   tokenId: number,
-  option?: ContractMethodOption,
+  option?: TransactionFeeOptions,
 ) => {
   const contract = getErc721ContractSigner(signer, contractAddress);
 

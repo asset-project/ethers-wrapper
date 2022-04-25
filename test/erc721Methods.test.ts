@@ -1,7 +1,6 @@
 import dotEnv from 'dotenv';
 import type { ethers } from 'ethers';
-import type { Provider } from '../src/types';
-import { getProvider, getWallet, contracts, getWalletSigner, parseGasPrice } from '../src';
+import { getProvider, getWallet, contracts, getWalletSigner, type Provider } from '../src';
 
 let wallet: ethers.Wallet | null = null;
 let provider: Provider | null = null;
@@ -58,13 +57,7 @@ describe('Test ERC721 methods', () => {
     const address = await wallet.getAddress();
     const walletSigner = getWalletSigner(wallet, provider);
 
-    const maxFeePerGas = parseGasPrice(10);
-    const maxPriorityFeePerGas = parseGasPrice(1.25);
-
-    const result = await contracts.ERC721.transferFrom(walletSigner, MOCK_NFT.address, address, 2, {
-      maxFeePerGas,
-      maxPriorityFeePerGas,
-    });
+    const result = await contracts.ERC721.transferFrom(walletSigner, MOCK_NFT.address, address, 2);
     expect(result).toBeDefined();
   }, 30000);
 

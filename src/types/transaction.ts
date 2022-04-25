@@ -1,3 +1,12 @@
+import type { ethers } from 'ethers';
+
+export type TransactionFeeOptions = {
+  gasLimit?: number;
+  gasPrice?: ethers.BigNumber;
+  // maxFeePerGas?: ethers.BigNumber;
+  // maxPriorityFeePerGas?: ethers.BigNumber;
+};
+
 export type TransactionParams = TxnType1Params | TxnType2Params;
 
 export type TxnType1Params = {

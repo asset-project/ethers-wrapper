@@ -1,7 +1,16 @@
 import dotEnv from 'dotenv';
 import type { ethers } from 'ethers';
-import type { Provider } from '../src/types';
-import { contracts, parseGasPrice, getProvider, getWallet, getWalletSigner } from '../src';
+import {
+  contracts,
+  getProvider,
+  getWallet,
+  getWalletSigner,
+  numberOfTokens,
+  formatUnits,
+  parseGasPrice,
+  type Provider,
+} from '../src';
+import { erc20TransferEstimateGas } from '../src/contracts/erc20/methods';
 
 let wallet: ethers.Wallet | null = null;
 let provider: Provider | null = null;
@@ -18,6 +27,7 @@ const MOCK_TOKEN = {
   name: 'Mock Token',
   symbol: 'MT',
   decimals: 18,
+  totalSupply: '1000000000000000000000000',
 };
 
 const NONEXISTENT_TOKEN_ADDRESS = '0x333333333333333333333333333333333333333a';
@@ -40,28 +50,67 @@ describe('Test ERC20 methods', () => {
 
   it('Checking token totalSupply', async () => {
     const result = await contracts.ERC20.totalSupply(provider, MOCK_TOKEN.address);
-    expect(Number(result)).toBeGreaterThanOrEqual(0);
+    expect(result.toString()).toBe(MOCK_TOKEN.totalSupply);
   });
 
   it('Checking token balance', async () => {
     const address = await wallet.getAddress();
     const result = await contracts.ERC20.balance(provider, MOCK_TOKEN.address, address);
-    expect(result).toBeDefined();
+    expect(result.toString()).toBeDefined();
   });
 
   it('Checking erc20 token transfer', async () => {
-    const address = await wallet.getAddress();
     const walletSigner = getWalletSigner(wallet, provider);
 
-    const maxFeePerGas = parseGasPrice(10);
-    const maxPriorityFeePerGas = parseGasPrice(1.25);
+    const to = '0x05b95eD55FcDd1Bc4a34EEF57989F76fc8fe15F5';
+    const amount = numberOfTokens(1, MOCK_TOKEN.decimals);
 
-    const result = await contracts.ERC20.transfer(walletSigner, MOCK_TOKEN.address, address, 1, {
-      maxFeePerGas,
-      maxPriorityFeePerGas,
+    const beforeSenderBalance = await contracts.ERC20.balance(
+      provider,
+      MOCK_TOKEN.address,
+      wallet.address,
+    );
+    const beforeReceiverBalance = await contracts.ERC20.balance(provider, MOCK_TOKEN.address, to);
+
+    const BSB = Math.floor(Number(formatUnits(beforeSenderBalance, MOCK_TOKEN.decimals)));
+    const BRB = Math.floor(Number(formatUnits(beforeReceiverBalance, MOCK_TOKEN.decimals)));
+
+    const gasPrice = parseGasPrice(10);
+
+    const tx = await contracts.ERC20.transfer(walletSigner, MOCK_TOKEN.address, to, amount, {
+      gasPrice,
     });
-    expect(result).toBeDefined();
-  }, 15000);
+    expect(tx).toBeDefined();
+
+    await tx.wait();
+
+    const afterSenderBalance = await contracts.ERC20.balance(
+      provider,
+      MOCK_TOKEN.address,
+      wallet.address,
+    );
+    const afterReceiverBalance = await contracts.ERC20.balance(provider, MOCK_TOKEN.address, to);
+
+    const ASB = Math.floor(Number(formatUnits(afterSenderBalance, MOCK_TOKEN.decimals)));
+    const ARB = Math.floor(Number(formatUnits(afterReceiverBalance, MOCK_TOKEN.decimals)));
+
+    expect(ASB).toBe(BSB - Math.floor(Number(formatUnits(amount, MOCK_TOKEN.decimals))));
+    expect(ARB).toBe(BRB + Math.floor(Number(formatUnits(amount, MOCK_TOKEN.decimals))));
+  }, 36000);
+
+  it('Checking estimate gas for erc20 transfer', async () => {
+    const walletSigner = getWalletSigner(wallet, provider);
+    const address = await walletSigner.getAddress();
+
+    const result = await erc20TransferEstimateGas(
+      walletSigner,
+      MOCK_TOKEN.address,
+      address,
+      numberOfTokens(100, MOCK_TOKEN.decimals),
+    );
+
+    expect(result.toNumber()).toBeGreaterThanOrEqual(30000);
+  });
 
   it('Name of a non-existent token', async () => {
     const result = await contracts.ERC20.name(provider, NONEXISTENT_TOKEN_ADDRESS);

@@ -1,6 +1,6 @@
-import { ethers } from 'ethers';
+import { ethers, type BigNumberish } from 'ethers';
 
-export const formatUnits = (amount: ethers.BigNumberish, unitName?: ethers.BigNumberish) => {
+export const formatUnits = (amount: BigNumberish, unitName?: BigNumberish) => {
   return ethers.utils.formatUnits(amount, unitName);
 };
 
