@@ -52,6 +52,23 @@ export const erc20TotalSupply = async (provider: Provider, contractAddress: stri
   }
 };
 
+export const erc20TokenData = async (provider: Provider, contractAddress: string) => {
+  return await Promise.all([
+    (async () => {
+      return await erc20Name(provider, contractAddress);
+    })(),
+    (async () => {
+      return await erc20Symbol(provider, contractAddress);
+    })(),
+    (async () => {
+      return await erc20Decimals(provider, contractAddress);
+    })(),
+    (async () => {
+      return await erc20TotalSupply(provider, contractAddress);
+    })(),
+  ]);
+};
+
 export const erc20Balance = async (
   provider: Provider,
   contractAddress: string,

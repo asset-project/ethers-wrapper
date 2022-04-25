@@ -58,6 +58,15 @@ describe('Test ERC20 methods', () => {
     expect(result.toString()).toBeDefined();
   });
 
+  it('Checking token methods', async () => {
+    const result = await contracts.ERC20.token(provider, MOCK_TOKEN.address);
+
+    expect(result[0]).toBe(MOCK_TOKEN.name);
+    expect(result[1]).toBe(MOCK_TOKEN.symbol);
+    expect(result[2]).toBe(MOCK_TOKEN.decimals);
+    expect(result[3].toString()).toBe(MOCK_TOKEN.totalSupply);
+  });
+
   it('Checking erc20 token transfer', async () => {
     const walletSigner = getWalletSigner(wallet, provider);
 

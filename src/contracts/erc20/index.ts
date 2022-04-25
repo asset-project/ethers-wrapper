@@ -7,6 +7,7 @@ import {
   erc20Transfer,
   erc20TransferEstimateGas,
   erc20CallStaticTransfer,
+  erc20TokenData,
 } from './methods';
 
 export const ERC20 = {
@@ -15,6 +16,7 @@ export const ERC20 = {
   decimals: erc20Decimals,
   totalSupply: erc20TotalSupply,
   balance: erc20Balance,
+  token: erc20TokenData,
   transfer: erc20Transfer,
   transferEstimateGas: erc20TransferEstimateGas,
   callStaticTransfer: erc20CallStaticTransfer,
