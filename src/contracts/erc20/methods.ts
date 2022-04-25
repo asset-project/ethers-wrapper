@@ -98,3 +98,19 @@ export const erc20TransferEstimateGas = async (
     return;
   }
 };
+
+export const erc20CallStaticTransfer = async (
+  signer: ethers.Signer,
+  contractAddress: string,
+  to: string,
+  amount: BigNumber,
+) => {
+  const contract = getErc20ContractSigner(signer, contractAddress);
+
+  try {
+    await contract.callStatic.transfer(to, amount);
+    return true;
+  } catch {
+    return false;
+  }
+};

@@ -10,7 +10,6 @@ import {
   parseGasPrice,
   type Provider,
 } from '../src';
-import { erc20TransferEstimateGas } from '../src/contracts/erc20/methods';
 
 let wallet: ethers.Wallet | null = null;
 let provider: Provider | null = null;
@@ -102,7 +101,7 @@ describe('Test ERC20 methods', () => {
     const walletSigner = getWalletSigner(wallet, provider);
     const address = await walletSigner.getAddress();
 
-    const result = await erc20TransferEstimateGas(
+    const result = await contracts.ERC20.transferEstimateGas(
       walletSigner,
       MOCK_TOKEN.address,
       address,
@@ -110,6 +109,31 @@ describe('Test ERC20 methods', () => {
     );
 
     expect(result.toNumber()).toBeGreaterThanOrEqual(30000);
+  });
+
+  it('Checking call static for erc20 token transfer', async () => {
+    const walletSigner = getWalletSigner(wallet, provider);
+    const address = await walletSigner.getAddress();
+
+    const amount = numberOfTokens(1, MOCK_TOKEN.decimals);
+
+    const result = await contracts.ERC20.callStaticTransfer(
+      walletSigner,
+      MOCK_TOKEN.address,
+      address,
+      amount,
+    );
+    expect(result).toBe(true);
+
+    const overBalance = numberOfTokens(1000000000, MOCK_TOKEN.decimals);
+
+    const resultFalse = await contracts.ERC20.callStaticTransfer(
+      walletSigner,
+      MOCK_TOKEN.address,
+      address,
+      overBalance,
+    );
+    expect(resultFalse).toBe(false);
   });
 
   it('Name of a non-existent token', async () => {
