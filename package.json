@@ -23,8 +23,8 @@
     "esm/"
   ],
   "scripts": {
-    "generateAccount": "ts-node ./scripts/generateAccount.ts",
-    "importAccount": "ts-node ./scripts/importAccount.ts",
+    "generateAccount": "ts-node ./scripts/generateAddress.ts",
+    "importAccount": "ts-node ./scripts/importAddress.ts",
     "test": "jest",
     "type-check": "tsc --pretty --noEmit",
     "test-all": "yarn type-check && yarn test",
